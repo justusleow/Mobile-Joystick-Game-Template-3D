@@ -4,7 +4,7 @@ public class CharacterMovement : MonoBehaviour
 {
     public VariableJoystick joystick;
     public CharacterController controller;
-    public float movementSpeed;
+    public float maxMovementSpeed;
     public float rotaionSpeed;
 
     public Canvas inputCanvas;
@@ -26,7 +26,7 @@ public class CharacterMovement : MonoBehaviour
         if (isJoystick)
         {
             var movementDirection = new Vector3(joystick.Direction.x, 0.0f, joystick.Direction.y);
-            controller.SimpleMove(movementDirection * movementSpeed);
+
 
             if (movementDirection.sqrMagnitude <= 0)
                 return;
@@ -35,6 +35,9 @@ public class CharacterMovement : MonoBehaviour
                 movementDirection, rotaionSpeed * Time.deltaTime, 0.0f);
 
             controller.transform.rotation = Quaternion.LookRotation(targetDirection);
+            
+            var movementSpeed = maxMovementSpeed * Vector3.Dot(movementDirection, targetDirection);
+            controller.SimpleMove(movementDirection * movementSpeed);
         }
     }
 }
